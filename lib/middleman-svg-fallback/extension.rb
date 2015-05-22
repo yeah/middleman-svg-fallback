@@ -16,7 +16,7 @@ module Middleman
 
             files.each do |file|
               # make sure we have both an svg and an svgz version
-              basename = file.sub(/\.svgz?$/,'')
+              basename = File.expand_path(file.sub(/\.svgz?$/,''))
 
               unless File.exists? "#{basename}.svg"
                 `gunzip --to-stdout --suffix .svgz  #{basename}.svgz > #{basename}.svg`
