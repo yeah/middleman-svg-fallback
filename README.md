@@ -14,18 +14,36 @@ Add this line to your `Gemfile`:
 gem 'middleman-svg-fallback'
 ```
 
-And something like this to your `config.rb`:
+
+## Configuration
+
+Activate the plugin in your config.rb:
 
 ```ruby
-  require "middleman-svg-fallback"
-  activate :svg_fallback,
-    :inkscape_bin => '/Applications/Inkscape.app/Contents/Resources/bin/inkscape',
-    :inkscape_options => '--export-dpi=100 --export-background-opacity=0'
+activate :svg_fallback
 ```
 
-(supposed you're working on a Mac)
+You may provide the path to your inkscape binary, if it's not in the `PATH`.
+E.g. on macOS, you may use the following configuration:
 
-Then, during build, middleman-svg-fallback will generate the fallbacks as you would expect and you can use them with a [modernizr](http://modernizr.com/) based CSS rule, like this for example:
+```ruby
+activate :svg_fallback, inkscape_bin: '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+```
+
+Furthermore, you may configure command line arguments, that should be passed on
+to inkscape:
+
+```ruby
+activate :svg_fallback, inkscape_options: '--export-dpi=100 --export-background-opacity=0'
+```
+
+
+## Usage
+
+If configured properly, middleman-svg-fallback will generate fallback images
+(PNGs and JPGs) for all SVGs within your `images_dir` as you would expect. You
+can use them with a [modernizr](http://modernizr.com/) based CSS rule, like this
+for example:
 
 ```css
 .illustration {
@@ -37,17 +55,15 @@ Then, during build, middleman-svg-fallback will generate the fallbacks as you wo
 }
 ```
 
-The JPEG files are intended for use with [OpenGraph](http://ogp.me/). Facebook doesn't like PNGs in `og:image` properties, so the JPG versions will come in handy.
+The generated JPEG files are intended for use with [OpenGraph](http://ogp.me/).
+Facebook doesn't like PNGs in `og:image` properties, so the JPG versions will
+come in handy.
+
 
 ## License
 
-MIT; Copyright (c) 2012 Jan Schulz-Hofen
+This software is licensed under the MIT License. [View the license](LICENSE).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Contributing
 
@@ -56,3 +72,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Running the tests
+
+To run the tests follow these steps:
+
+1. Clone the repository
+2. Run `bundle install` to install all development dependencies
+3. Use `rake` to execute the test suite
+   a. If inkscape is not in your PATH, you may provide the optional
+      `INKSCAPE_PATH` environment variable, e.g.
+      `INKSCAPE_PATH=/path/to/inkscape rake`
