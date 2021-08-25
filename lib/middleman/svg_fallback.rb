@@ -2,6 +2,9 @@ class Middleman::SVGFallback < Middleman::Extension
   option :inkscape_bin, 'inkscape', 'Path to Inkscape binary, e.g. "/Applications/Inkscape.app/Contents/Resources/bin/inkscape" on a Mac, defaults to "inkscape"'
   option :inkscape_options, '', 'Command line arguments, that shall be passed on to inkscape, e.g. "--export-dpi=100 --export-background-opacity=0", defaults to ""'
 
+  option :convert_bin, 'convert', 'Path to convert binary, e.g. "/usr/local/bin/convert" on a Mac, defaults to "convert"'
+  option :convert_options, '', 'Command line arguments, that shall be passed on to convert", defaults to ""'
+
   def after_build(builder)
     dir = File.join(app.config[:build_dir], app.config[:images_dir])
 
@@ -23,10 +26,11 @@ class Middleman::SVGFallback < Middleman::Extension
       end
 
       # generate fallbacks
-      %w(jpg png).each do |ext|
-        builder.thor.run("#{options.inkscape_bin} --export-png=#{basename}.#{ext} #{options.inkscape_options} --without-gui #{basename}.svg", run_args)
-        builder.thor.say_status :svg_fallback, "#{unprefixed}.#{ext}"
-      end
+      builder.thor.run("#{options.inkscape_bin} --export-filename=#{basename}.png #{options.inkscape_options} #{basename}.svg", run_args)
+      builder.thor.say_status :svg_fallback, "#{unprefixed}.png"
+
+      builder.thor.run("#{options.convert_bin} #{options.convert_options} #{basename}.png #{basename}.jpg", run_args)
+      builder.thor.say_status :svg_fallback, "#{unprefixed}.jpg"
     end
   end
 end
