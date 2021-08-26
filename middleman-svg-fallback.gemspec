@@ -2,7 +2,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "middleman-svg-fallback"
-  s.version     = "0.1.1"
+  s.version     = "0.2.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jan Schulz-Hofen"]
   s.email       = ["jan@launchco.com"]
